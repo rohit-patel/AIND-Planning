@@ -1,6 +1,69 @@
 
 # Implement a Planning Search
 
+
+## Introduction
+
+This repository implements a planning search per the [rubric here](https://review.udacity.com/#!/rubrics/681/view).
+
+## Analysis
+
+The following algorithms were run on each of the problems, and the table below shows a summary of time elapsed in seconds:
+
+|Search Type |air_cargo_p1| air_cargo_p2| air_cargo_p3|
+| --- | :---: | :---: | :---: |
+|astar_search with h_ignore_preconditions|0.1|43.7|172|
+|astar_search with h_pg_levelsum|0|93.5|389.3|
+|breadth_first_search|0.2|44.6|272.4|
+|depth_first_graph_search|0.1|9.1|6.3|
+|depth_limited_search|0.4|>10 mins|>10 mins|
+|recursive_best_first_search|14.3|>10 mins|> 10 mins
+|uniform_cost_search|0.2|53.8|247.5|
+
+We note informed search algorithms perform better than uninformed, however, depth first search is quite fast in arriving at the solution for these particular problems. We will look at the results in light of the optimality of the answer to get more insights.
+
+**Plan Length:**
+
+|Search Type |air_cargo_p1| air_cargo_p2| air_cargo_p3|
+| --- | :---: | :---: | :---: |
+|astar_search with h_ignore_preconditions|6|9|12|
+|astar_search with h_pg_levelsum|6|9|13|
+|breadth_first_search|6|9|12|
+|depth_first_graph_search|20|619|392|
+|depth_limited_search|50|50|NA|
+|recursive_best_first_search|6|NA|NA|
+|uniform_cost_search|6|9|12|
+
+We note that depth first search, while quick, often produces very suboptimal plans, as is expected if the search goes deep in unwanted directions (AIND, Udacity Sec 14-15) 2 . As expected, the breadth first search always produces the optimal route (AIND, Udacity Sec 14-15) 2 , and is highly efficient (from a time perspective) with regards to the problems we have studied. This is because breadth_first_search, while searches for more nodes than astar_search with h_ignore_preconditions, it is must faster exploring each node. Note the performance of the a-star search with two different heuristic functions. With h_ignore_preconditions, the search always leads to an optimal solution, this is because it is an admissible heuristic function. However, with the h_pg_levelsum heuristic function, that is not always the case. This is because the function is inadmissible (AIMA, pg 392) 1 . We should note however that the plans produce by this heuristic functions are always close to optimal. We also note that informed searches typically are more computationally intensive, for each node explored, and
+thus can be outperformed by uninformed searches. This is especially visible when comparing breadth_first_search with astar_search with h_ignore_preconditions for our problems. Following tables highlight the phenomenon:
+
+
+**Expansions:**
+
+|Search Type |air_cargo_p1| air_cargo_p2| air_cargo_p3|
+| --- | :---: | :---: | :---: |
+|astar_search with h_ignore_preconditions |41 |1310 |4478|
+|astar_search with h_pg_levelsum |11 |74 |229|
+|breadth_first_search |43 |3343 |14663|
+|depth_first_graph_search |21 |624 |408|
+|depth_limited_search |101 |222719 |NA|
+|recursive_best_first_search |4229 |NA |NA|
+|uniform_cost_search |55 |4689 |17665|
+
+
+**Expansions/sec:**
+
+|Search Type|air_cargo_p1|air_cargo_p2|air_cargo_p3|
+| --- | :---: | :---: | :---: |
+|astar_search with h_ignore_preconditions|280|30|26|
+|astar_search with h_pg_levelsum|223|1|1|
+|breadth_first_search |286 |75 |54|
+|depth_first_graph_search |309 |69 |65|
+|depth_limited_search |276 |73 |NA|
+|recursive_best_first_search |296 |NA |NA|
+|uniform_cost_search |298 |87 |71|
+
+
 ## Synopsis
 
 This project includes skeletons for the classes and functions needed to solve deterministic logistics planning problems for an Air Cargo transport system using a planning search agent. 
